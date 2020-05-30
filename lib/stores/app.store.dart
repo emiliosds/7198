@@ -2,13 +2,15 @@ import 'package:mobx/mobx.dart';
 import 'package:todos/models/todo-item.model.dart';
 part 'app.store.g.dart';
 
-class AppStore = new _AppStore with _$AppStore;
+class AppStore = _AppStore with _$AppStore;
 
-class _AppStore with Store {
+abstract class _AppStore with Store {
   @observable
   String currentState = "none";
+
   @observable
   bool busy = false;
+
   @observable
   ObservableList<TodoItem> todos = new ObservableList<TodoItem>();
 
