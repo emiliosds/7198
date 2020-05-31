@@ -1,8 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:todos/components/button.widget.dart';
 import 'package:todos/widgets/user-card.widget.dart';
 
-class CreateTodoView extends StatelessWidget {
+class CreateTodoView extends StatefulWidget {
+  @override
+  _CreateTodoViewState createState() => _CreateTodoViewState();
+}
+
+class _CreateTodoViewState extends State<CreateTodoView> {
+  final _formKey = GlobalKey<FormState>();
+  final _dateFormat = new DateFormat('dd/MM/yyyy');
+
+  String task = "";
+  DateTime date = DateTime.now();
+
+  Future<Null> _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: date,
+      firstDate: DateTime(2000, 1),
+      lastDate: DateTime(2040),
+    );
+    if (picked != null && picked != date) {
+      setState(() {
+        date = picked;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +61,7 @@ class CreateTodoView extends StatelessWidget {
                         top: 20,
                       ),
                       child: Text(
-                        "02/02/2020",
+                        _dateFormat.format(date),
                         style: TextStyle(
                           color: Theme.of(context).primaryColor,
                           fontSize: 34,
@@ -44,8 +70,10 @@ class CreateTodoView extends StatelessWidget {
                       ),
                     ),
                     FlatButton(
-                      onPressed: () {},
                       child: Text("Alterar data"),
+                      onPressed: () {
+                        _selectDate(context);
+                      },
                     ),
                   ],
                 ),
@@ -66,9 +94,7 @@ class CreateTodoView extends StatelessWidget {
             ),
             FlatButton(
               child: Text("Cancelar"),
-              onPressed: (){
-                
-              }, 
+              onPressed: () {},
             ),
           ],
         ),

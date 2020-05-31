@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todos/controllers/todo.controller.dart';
 import 'package:todos/stores/app.store.dart';
+import 'package:todos/views/create-todo.view.dart';
 import 'package:todos/widgets/navbar.widget.dart';
 import 'package:todos/widgets/todo-list.widget.dart';
 import 'package:todos/widgets/user-card.widget.dart';
@@ -30,12 +31,12 @@ class HomeView extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => CreateTodoView(),
-          //   ),
-          // );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CreateTodoView(),
+            ),
+          );
         },
         backgroundColor: Theme.of(context).primaryColor,
       ),
