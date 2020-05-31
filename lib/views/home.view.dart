@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todos/controllers/todo.controller.dart';
+import 'package:todos/stores/app.store.dart';
 import 'package:todos/widgets/navbar.widget.dart';
 import 'package:todos/widgets/todo-list.widget.dart';
 import 'package:todos/widgets/user-card.widget.dart';
@@ -6,6 +9,12 @@ import 'package:todos/widgets/user-card.widget.dart';
 class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final store = Provider.of<AppStore>(context);
+    final controller = new TodoController(store);
+
+    //Isso só irá acontecer na primeira vez que o app for executado
+    if (store.currentState == "none") controller.changeSelection("today");
+
     return Scaffold(
       body: Column(
         children: <Widget>[
