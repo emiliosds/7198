@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:todos/components/button.widget.dart';
+import 'package:todos/controllers/todo.controller.dart';
+import 'package:todos/models/todo-item.model.dart';
+import 'package:todos/stores/app.store.dart';
+import 'package:todos/views/home.view.dart';
 import 'package:todos/widgets/user-card.widget.dart';
 
 class CreateTodoView extends StatefulWidget {
@@ -31,6 +36,9 @@ class _CreateTodoViewState extends State<CreateTodoView> {
 
   @override
   Widget build(BuildContext context) {
+    final store = Provider.of<AppStore>(context);
+    final controller = new TodoController(store);
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -39,6 +47,7 @@ class _CreateTodoViewState extends State<CreateTodoView> {
             Padding(
               padding: EdgeInsets.all(40),
               child: Form(
+                key: _formKey,
                 child: Column(
                   children: <Widget>[
                     TextFormField(
@@ -55,6 +64,15 @@ class _CreateTodoViewState extends State<CreateTodoView> {
                         fontSize: 20,
                         color: Theme.of(context).primaryColor,
                       ),
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Por favor, informe o título da tarefa';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        task = value;
+                      },
                     ),
                     Padding(
                       padding: EdgeInsets.only(
@@ -89,12 +107,39 @@ class _CreateTodoViewState extends State<CreateTodoView> {
               child: TDButton(
                 text: "Salvar",
                 width: double.infinity,
-                callback: () {},
+                callback: () {
+                  if (!_formKey.currentState.validate()) {
+                    return;
+                  }
+                  _formKey.currentState.save();
+                  var todo = new TodoItem(
+                    date: date,
+                    title: task,
+                  );
+
+                  
+
+                  controller.add(todo).then((_) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HomeView(),
+                      ),
+                    );
+                  });
+                },
               ),
             ),
             FlatButton(
               child: Text("Cancelar"),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomeView(),
+                  ),
+                );
+              },
             ),
           ],
         ),

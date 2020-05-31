@@ -39,42 +39,48 @@ class TodoList extends StatelessWidget {
                     subtitle: Text(
                       _dateFormat.format(todo.date),
                     ),
+                    onLongPress: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text("Concluir a Tarefa"),
+                            content:
+                                Text("Deseja concluir a tarefa ${todo.title}?"),
+                            actions: <Widget>[
+                              FlatButton(
+                                child: new Text("Cancelar"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              FlatButton(
+                                child: new Text(
+                                  "Concluir",
+                                  style: TextStyle(
+                                    color: Colors.green,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  controller.markAsDone(todo).then((data) {
+                                    Navigator.of(context).pop();
+                                  }).catchError((err) {
+                                    var snackbar = new SnackBar(
+                                      content: Text("Ops, algo deu errado!"),
+                                    );
+                                    Scaffold.of(context).showSnackBar(snackbar);
+                                  });
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
                   );
                 },
               ),
       ),
     );
-
-    //   return ListView(
-    //     padding: EdgeInsets.only(
-    //       left: 40,
-    //     ),
-    //     children: <Widget>[
-    //       ListTile(
-    //         title: Text(
-    //           "Ir ao supermercado",
-    //           style: TextStyle(
-    //             fontSize: 18,
-    //             color: Colors.black,
-    //           ),
-    //         ),
-    //         subtitle: Text(
-    //           "0/02/2020",
-    //         ),
-    //       ),
-    //       ListTile(
-    //         title: Text(
-    //           "Ir ao supermercado",
-    //           style: TextStyle(
-    //             fontSize: 18,
-    //             color: Colors.black.withOpacity(0.2),
-    //           ),
-    //         ),
-    //         subtitle: Text(
-    //           "0/02/2020",
-    //         ),
-    //       )
-    //     ],
-    //   );
   }
 }
